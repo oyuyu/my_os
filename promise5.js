@@ -19,7 +19,9 @@ class _Promise {
         this.fulfilledList = []
         this.rejectList = []
 
-
+        //处理异步
+        this.onFulfilledCallback = null;
+        this.onRejectedCallback = null;
 
         // 传入执行器(回调函数)并执行   接收两个函数参数
         handleFunc(this.resolve, this.reject)
@@ -54,6 +56,7 @@ class _Promise {
                         this.fulfilledList.forEach(item => item())
                         this.fulfilledList = []
 
+                        this.onFulfilledCallback && this.onFulfilledCallback(val);
 
                     }
                 }
@@ -73,7 +76,12 @@ class _Promise {
     then(onfulfilled, onrejected) {
         return new _Promise(() => {
             switch (this.status) {
+                case PENDING:
+                    this.onFulfilledCallback = onfulfilled
+                    this.onRejectedCallback = onrejected
+                    console.log('pending');
 
+                    break
                 case FUlFILLED:
                     const res = onfulfilled(this.value)
                     console.log(res, 'fulfilled');
