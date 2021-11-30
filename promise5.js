@@ -17,7 +17,7 @@ class _Promise {
         this.status = PENDING
         this.value = undefined
 
-        // 存储回调成功/失败的函数
+        // 存储回调成功/失败的函数    实现then的多次调用
         this.fulfilledList = []
         this.rejectList = []
 
@@ -78,7 +78,7 @@ class _Promise {
     }
 
     then(onfulfilled, onrejected) {
-        return new _Promise(() => {
+        return new _Promise((resolve, reject) => {
             switch (this.status) {
                 case PENDING:
                     this.onFulfilledCallback = onfulfilled
