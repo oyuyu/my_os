@@ -16,6 +16,8 @@ class _Promise {
         //状态&&结果  管理 
         this.status = PENDING
         this.value = undefined
+
+        // 存储回调成功/失败的函数
         this.fulfilledList = []
         this.rejectList = []
 
@@ -52,8 +54,10 @@ class _Promise {
 
                         this.value = val
 
+                        console.log(this.fulfilledList, 'fulfilledList');
+
                         //fulfilllist 执行并清空
-                        this.fulfilledList.forEach(item => item())
+                        this.fulfilledList.forEach(item => item(val))
                         this.fulfilledList = []
 
                         this.onFulfilledCallback && this.onFulfilledCallback(val);
@@ -80,6 +84,8 @@ class _Promise {
                     this.onFulfilledCallback = onfulfilled
                     this.onRejectedCallback = onrejected
                     console.log('pending');
+                    this.fulfilledList.push(onfulfilled)
+                    this.rejectList.push(onrejected)
 
                     break
                 case FUlFILLED:
@@ -128,4 +134,16 @@ promise1.then((val) => {
     return 22
 }).then((val) => {
     console.log(val);
+})
+
+promise1.then((val) => {
+    console.log(1);
+})
+
+promise1.then((val) => {
+    console.log(2);
+})
+
+promise1.then((val) => {
+    console.log(3);
 })
