@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>history</title>
+</head>
+
+<body>
+    <script>
+        // 客户端前端路由是怎么实现的
+        const pushState = () => {
+            history.pushState({
+                page: 1
+            }, 'page_1', '/pushState')
+        }
+
+        const repalceState = () => {
+            history.replaceState({
+                page: 2
+            }, 'page_2', '/repalceState')
+        }
+
+        window.onpopstate = () => {
+            console.log(history, history.state);
+        }
+    </script>
+    <button onclick="pushState()">
+        pushState
+    </button>
+
+    <button onclick="repalceState()">
+        replaceState
+    </button>
+</body>
+
+</html>
