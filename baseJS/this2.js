@@ -1,12 +1,41 @@
 /**
- * @改变this指向
+ * @改变this指向 优先级 箭头函数> bind call apply> 普通的指向 
  */
 
 
-function getname(params) {
+var xiaoming = { name: 'xiaoming' }
+
+/**
+ * 
+ * @箭头函数指向  指向定义时最近的非箭头函数的执行上下文
+ */
+function outer() {
+    console.log('1', this);
+    const getname = () => {
+        console.log('箭头函数', this);
+    }
+    getname()
+
+    function inner() {
+        console.log('inner', this);
+        getname()
+    }
+    inner()
+}
+
+xiaoming.outer = outer
+xiaoming.outer()
+
+
+/**
+ * 
+ * bind call apply
+ */
+
+
+function getname() {
     console.log(this, arguments);
 }
-var xiaoming = { name: 'xiaoming' }
 getname()
 
 //立马执行
@@ -17,7 +46,14 @@ getname.apply(xiaoming, ['apply', 'xiaoming'])
 //  实际上返回新函数   changebind=getname.bind(xiaoming, ['bind', 'xiaoming'])    这个函数才是绑定新对象的函数
 getname.bind(xiaoming, 'bind', 'xiaoming')()
 
+/**
+ * @优先级
+ */
 
+var whofirst = () => {
+    console.log(this, 'whofirst'); //指向window   但是为什么打印出来{}
+}
+whofirst.call(xiaoming)
 
 
 
