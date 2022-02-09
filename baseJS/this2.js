@@ -88,7 +88,7 @@ console.log('------------_apply------------');
 getname._apply(xiaoming, ['_apply'])
 getname._apply()
 
-/**
+/**                            
  * @bind
  * 使用场景
  */
