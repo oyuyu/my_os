@@ -43,19 +43,23 @@ xiaohong.study()
 //缺点:每生成一个实例,构造函数内部的方法都会重新开辟一块新的内存空间
 //---->既要知道类型,又要解决占用内存的问题---->原型 prototype
 
-
 //原型的方式创建对象
 
 function People() {
     this.color = 'red'
 }
 
-People.prototype.getfamily = function () { }    //无论创建多少个实例,此方法只占用一份内存
+People.prototype = {
+    getfamily: function () { }       //无论创建多少个实例,此方法只占用一份内存
+}
 
 const p1 = new People()
 const p2 = new People()
 
 console.log(p1.getfamily === p2.getfamily, '通过原型创建对象, 是否新开辟内存空间');
+console.log(p1.__proto__, '__proto__');
+console.log(Object.getPrototypeOf(p1), 'getPrototypeOf');
+console.log(p1.constructor, 'constructor');
 
 
 //静态属性
@@ -70,7 +74,7 @@ function Goods() {
 
 const g1 = new Goods()
 const g2 = new Goods()
- 
+
 
 
 
@@ -111,15 +115,3 @@ console.log(Array.isArray(a));
 console.log(Array.prototype == a.__proto__);
 console.log(a instanceof Array);
 console.log(Object.prototype.toString.call(a));
-
-
-
-
-console.log();
-console.log();
-console.log();
-console.log();
-console.log();
-console.log();
-console.log();
-console.log();

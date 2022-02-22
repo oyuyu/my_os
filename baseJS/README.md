@@ -54,12 +54,20 @@ Array Date Function regexp
 4.静态属性
 5.原型
 
-为什么要在原型上添加属性/方法
+### 为什么要在原型上添加属性/方法
 构造函数内通过this的方式定义方法,每new一个实例都会开辟一块新的内存空间  导致内存的滥用
+//在原型prototype上添加属性方法
 Player.prototype={
    start:function(){},
    
 }
+
+### 怎样找到一个函数的原型对象
+__proto__
+
+
+
+
 
 
 
