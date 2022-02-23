@@ -68,6 +68,15 @@ __proto__
 
 
 
+### new 关键字做了什么
+1. 继承Player的对象p1被创建
+2. p1.__proto__==Player.prototype
+3. 改变this指向 将this指向new出来的对象p1
+4. 返回新对象p1
+
+
+
+
 
 
 
