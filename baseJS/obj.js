@@ -1,8 +1,10 @@
 
 /**
  * @创建对象
- * 普通模式  工厂模式
  */
+
+
+// 1 普通模式 
 
 const player = new Object()
 player.age = 18
@@ -14,7 +16,7 @@ const player1 = {
     study: function () { }
 }
 
-//工厂模式
+//  2 工厂模式
 //这种方式创建判断不出类型
 function creatPlayer(age) {
     const Player = new Object()
@@ -27,7 +29,7 @@ const xiaoming = creatPlayer(18)
 console.log(xiaoming, 'xiaoming');
 console.log(xiaoming.constructor);   //输出function:object   根本不知道是继承了Player 但实际上本意是创建各种player  
 
-//构造函数+实例的方式创建  
+// 3 构造函数+实例的方式创建  
 //构造函数
 function Player() {
     this.age = 18
@@ -35,7 +37,7 @@ function Player() {
 }
 //创建实例
 const xiaohong = new Player()
-console.log(xiaohong, xiaohong.constructor, 'xiaohong');
+console.log(xiaohong, Player.prototype.constructor, 'xiaohong');
 //继承
 xiaohong.study()
 
@@ -43,7 +45,11 @@ xiaohong.study()
 //缺点:每生成一个实例,构造函数内部的方法都会重新开辟一块新的内存空间
 //---->既要知道类型,又要解决占用内存的问题---->原型 prototype
 
-//原型的方式创建对象
+// 4 原型的方式创建对象
+/**
+ * 优点： 可以知道类型  不占用内存
+ * 缺点 共享同一份原型
+ */
 
 function People() {
     this.color = 'red'
@@ -59,7 +65,8 @@ const p2 = new People()
 console.log(p1.getfamily === p2.getfamily, '通过原型创建对象, 是否新开辟内存空间');
 console.log(p1.__proto__, '__proto__');
 console.log(Object.getPrototypeOf(p1), 'getPrototypeOf');
-console.log(p1.constructor, 'constructor');
+console.log(People.prototype, '--------');
+console.log(People.prototype.constructor, 'People');
 
 
 //静态属性
