@@ -79,6 +79,13 @@ constructor 指向构造函数，完全重写原型对象会改变 constructor
 4. 返回新对象p1
 
 
+### 原型链
+p1.__proto__==People.prototype  组合起来的链式结构形成原型链
+
+对于一个实例p1,查找其属性的时候,如果本身有这个属性直接输出,如果本身没有这个属性会顺着其原型链向上查找  People.prototype -> Function.prototype -> Object.prototype  
+
+
+
 
 
 
