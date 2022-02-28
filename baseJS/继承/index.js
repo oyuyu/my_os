@@ -16,7 +16,11 @@ function Parent() {
 
 function Child() { }
 
+// 更改子prototype也会将父的prototype改变
+// Child.prototype = Parent.prototype
+
 //直接将prototype覆盖,存在的问题: prototype上有个constructor属性  直接覆盖的话其constructor属性也被覆盖   因此需要重写constructor
+//让Child.prototype 使用Parent的prototype
 Child.prototype = new Parent()
 Child.prototype.constructor = Child
 
@@ -38,7 +42,7 @@ console.log(c2.actions);
 /**
  * @构造函数继承
  * 为什么父类存在引用类型,改变一个实例会改变所有实例的此变量?  ->  存在于原型对象上   ->让其不在原型对象上
- * 缺点:浪费内存
+ * 缺点:浪费内存 
  */
 
 function Parent1(name, color) {
@@ -52,7 +56,6 @@ function Parent1(name, color) {
 
 function Child1() {
     Parent1.call(this, ...arguments)   //在Child1的构造函数里面通过this调用一遍Parent1方法   相当于在this的上下文里重新走了一遍Parent1的方法
-
 }
 
 const c11 = new Child1('c11', 'red')
@@ -66,6 +69,7 @@ console.log(c11, c21, '构造函数传参');
 
 /**
  * @组合继承  原型链+构造函数继承
+ * 缺点:调用了两次构造函数   生成了多余的属性
  */
 
 function Parent2(name, color) {
@@ -80,10 +84,43 @@ Parent2.prototype.getname = function () {
 
 
 function Child2() {
-    Parent2.call(this, ...arguments)   //在Child1的构造函数里面通过this调用一遍Parent1方法   相当于在this的上下文里重新走了一遍Parent1的方法
+    Parent2.call(this, ...arguments)   //第一次调用构造函数
+}
+Child2.prototype = new Parent2()   //第二次调用构造函数    占用内存
+Child2.prototype.constructor = Child2
+
+
+const c12 = new Child2('c12', 'red')
+const c22 = new Child2('c22', 'blue')
+c22.actions.push('sing')
+
+console.log(c12.actions, '组合继承');
+console.log(c22.actions, '组合继承');
+console.log(c12, c22, c12.getname === c22.getname, '组合继承传参');
+c12.getname('c12')
+c22.getname('c22')
+
+
+/**
+ * @寄生组合式继承
+ */
+
+
+function Parent2(name, color) {
+    this.name = name
+    this.color = color
+    this.actions = ['eat', 'rap']
 }
 
-Child2.prototype = new Parent2()
+Parent2.prototype.getname = function () {
+    console.log(this.name);
+}
+
+
+function Child2() {
+    Parent2.call(this, ...arguments)
+}
+Child2.prototype = Object.create(Parent.prototype)   //变动点
 Child2.prototype.constructor = Child2
 
 
