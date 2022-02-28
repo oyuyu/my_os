@@ -1,7 +1,5 @@
 //作用域 作用域链和执行上下文栈   是有区别的
 
-
-
 function inner(num) {
     var getData = function getData() {}
         //函数找作用域链的时候是找 定义时候的作用域链 (是找定义时候的栈而不是执行时候的栈)

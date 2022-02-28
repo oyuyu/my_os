@@ -8,7 +8,6 @@
  */
 
 
-
 (function() {
     var Person = function() {
         this.name = 'xiaoming'

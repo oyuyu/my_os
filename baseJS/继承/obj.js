@@ -3,7 +3,6 @@
  * @创建对象
  */
 
-
 // 1 普通模式 
 
 const player = new Object()
