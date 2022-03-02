@@ -124,14 +124,33 @@ Child2.prototype = Object.create(Parent.prototype)   //变动点
 Child2.prototype.constructor = Child2
 
 
-const c12 = new Child2('c12', 'red')
-const c22 = new Child2('c22', 'blue')
-c22.actions.push('sing')
+const c122 = new Child2('c122', 'red')
+const c222 = new Child2('c222', 'blue')
+c222.actions.push('sing')
 
-console.log(c12.actions, '组合继承');
-console.log(c22.actions, '组合继承');
-console.log(c12, c22, c12.getname === c22.getname, '组合继承传参');
-c12.getname('c12')
-c22.getname('c22')
+console.log(c122.actions, '组合继承');
+console.log(c222.actions, '组合继承');
+console.log(c122, c222, c122.getname === c222.getname, '组合继承传参');
+c122.getname('c122')
+c222.getname('c222')
+
+
+
+// class继承
+class CParent {
+    constructor() {
+        this.name = 'parent'
+    }
+
+}
+
+class CChild extends CParent {
+    constructor(props) {
+        super(props)  //实际上是在构造函数内部执行一遍CParent  返回的是继承了Cparent之后的CChild构造函数
+    }
+}
+
+const cc1 = new CChild()
+console.log(cc1.name, 'class继承');
 
 
