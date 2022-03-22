@@ -1,0 +1,18 @@
+{
+    "name": "saas-fe-fission-v2-react",
+    "version": "0.11.0",
+    "private": true,
+    "dependencies": {
+        "@babel/cli": "^7.17.6",
+        "@babel/core": "^7.17.8",
+        "@babel/plugin-proposal-class-properties": "^7.16.7",
+        "@babel/plugin-proposal-decorators": "^7.17.8",
+        "@babel/polyfill": "^7.12.1",
+        "@babel/preset-env": "^7.16.11",
+        "install": "^0.13.0",
+        "npm": "^8.5.5"
+    },
+    "scripts": {
+        "babel": "npm run ./node_modules/.bin/babel async.js --out-dir=./dist"
+    }
+}
