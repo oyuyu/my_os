@@ -3,8 +3,6 @@
     "version": "0.11.0",
     "private": true,
     "dependencies": {
-        "@babel/cli": "^7.17.6",
-        "@babel/core": "^7.17.8",
         "@babel/plugin-proposal-class-properties": "^7.16.7",
         "@babel/plugin-proposal-decorators": "^7.17.8",
         "@babel/polyfill": "^7.12.1",
@@ -12,7 +10,15 @@
         "install": "^0.13.0",
         "npm": "^8.5.5"
     },
+    "devDependencies": {
+        "@babel/cli": "^7.17.6",
+        "@babel/core": "^7.17.8",
+        "browserify": "^17.0.0",
+        "rollup": "^2.70.1"
+    },
     "scripts": {
-        "babel": "npm run ./node_modules/.bin/babel async.js --out-dir=./dist"
+        "babel": "npm run ./node_modules/.bin/babel async.js --out-dir=./dist",
+        "bundle": " browserify ./baseJS/ES6/3.async.js --out-dir=./dist",
+        "rollup": " rollup index.js --file output.js"
     }
 }
