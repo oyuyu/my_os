@@ -88,3 +88,17 @@ module: {
         loader: 'babel-loader'
     }
 }
+
+
+
+## webpack常见的优化方式
+ 1. 动态加载/异步代码分割  (dynamic import)
+ 减少主要打包模块的体积 从而使首屏加载js获取的更快   达到模块的按需加载    winder/chunck
+   1. 手动声明式按需加载  
+   直接写dynamic import  通过import 函数去加载一个模块    
+   通过require.ensure() import(),webpack会将其作为异步处理的方式进行异步处理
+   
+   2. 通过配置非主动的进行处理
+   split chunck 配置文件大小, 比如文件>100K/同时被三个模块引用 将其当做一个chunck提取出来
+
+   手动将大型文件/需要延迟加载的文件进行异步加载

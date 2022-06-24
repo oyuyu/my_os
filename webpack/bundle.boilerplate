@@ -1,0 +1,97 @@
+// 运行时执行的代码
+
+(function (self) {
+    // 注释作为占位符的格式
+    var __runtimeConfig = /* runtime-config */;
+    var cache = {};
+    var moduleList = [
+        /* module-list-template */
+    ];
+    var moduleDepMapList = [
+        /* module-dep-map-list-template */
+    ];
+
+    var require = function require(id, parentModuleId) {
+        // 如果parentId是undefined使用id作为currentModuleId  如果不是则从moduleDepMapList里面找到当前的模块id
+        var currentModuleId = parentModuleId !== undefined ? moduleDepMapList[parentModuleId][id] : id;
+
+        // 判断cache随想里面是否加载过模块id 如果执行过则直接返回结果cache[currentModuleId]
+        // 运行时加载模块需要遵循单例的原则, 如果运行时模块已经加载并执行过就不再去执行了  保证每个模块运行时是单例的
+        if (cache.hasOwnProperty(currentModuleId)) return cache[currentModuleId];
+        var module = {exports: {}};
+        var func = moduleList[currentModuleId];
+        func(
+            (function(parentModuleId) {
+                var closureRequire = function closureRequire(id) {
+                    return require(id, parentModuleId);
+                }
+                closureRequire.ensure = function closureRequire(id) {
+                    return require.ensure(id, parentModuleId);
+                }
+                return closureRequire;
+            })(id),
+            module,
+            module.exports
+        );
+        cache[currentModuleId] = module.exports;
+        return cache[currentModuleId];
+    };
+
+    self["__dynamicRequire"] = function __dynamicRequire(chunkId, func) {
+        var chunkCache = cache[chunkId];
+        var resolve = chunkCache[0];
+        var module = {exports: {}};
+        func(require, module, module.exports);
+        cache[chunkId] = module.exports;
+        resolve(cache[chunkId]);
+    }
+
+    // 当遇到什么文件/方法的时候进行异步的加载  1.dynamic import  2.require.ensure
+    // require 方法上要挂载一个ensure方法
+
+    // 主boundle 子chunk
+    // 加载主boundle的时候(所有文件打包在一个文件的时候)是同步加载的, 称主模块为boundle  主boundl也可成为一个chunk
+    // 是由主模块发起请求异步加载的模块 默认情况下会将其成为chunk(块)
+
+    // 通过require.ensure方法异步的加载小的模块
+    // 异步--不可避免的问题:状态不确定 可能正在加载/加载成功/加载失败
+    require.ensure = function(chunkId, parentModuleId) {
+
+        // 当前模块准确的ID
+        var currentModuleId = moduleDepMapList[parentModuleId][chunkId];
+        var chunkStatusSymbol = "__pending";
+        var chunkPromise = cache[currentModuleId];
+        
+        // 防止多次发送某个chunk请求
+        if (chunkPromise === void 0) {
+            // 把当前模块通过script标签 类似于jsonP的形式将其请求出来
+            //  __runtimeConfig.public当前静态文件目录  
+            var $script = document.createElement("script");
+            $script.src = __runtimeConfig.public + currentModuleId + ".js";
+            document.body.appendChild($script);
+
+            //  怎样判断文件已经执行成功
+            var promise = new Promise(function(resolve) {
+
+                // 将Promise的状态存到当前的主boundle里
+                var chunkCache = [resolve];
+                // 用chunkStatusSymbol标记其状态
+                chunkCache[chunkStatusSymbol] = true;
+                // 将当前Promise里面的resolve 存储在cache里面
+                cache[currentModuleId] = chunkCache;
+            });
+            // 将当前Promise存到cache
+            cache[currentModuleId].push(promise);
+            return promise;
+        }
+
+        if (chunkPromise[chunkStatusSymbol]) {
+            return chunkPromise[1]
+        }
+
+        return chunkPromise;
+    }
+    // 入口模块是moduleList的最后一个模块
+    require(moduleList.length - 1);
+
+})(this);

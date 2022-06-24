@@ -1,78 +1,92 @@
-#!/usr/bin/env node
+const {existsSync, writeFileSync, readFileSync, watch, read} = require('fs');
+const {dirname, resolve, extname} = require('path');
 
-const path = require('path')
-const fs = require('fs')
-const { stringify } = require('querystring')
+const root = dirname(require.main.paths[1]);
 
-//绝对路径与文件内容的映射
-let absoluteMapfs = {}
+const funcWrapper = ['function (require, module, exports) {', '}'];
+const getFilePath = modulePath => [modulePath, `${modulePath}.js`, `${modulePath}/index.js`].find(existsSync);
 
-//被请求文件的相对路径与 文件内容的映射
-let requirePathMapChildfs = {}
+main(require(resolve(root, 'packer.config')));
 
-//实现路径的补全,方便读取文件内容   name/name.js   ->   name.js
-const getfilePath = (childpath) =>
-  [childpath, `${childpath}.js`].find(fs.existsSync)
+function main(config) {
+    if (Array.isArray(config)) return config.map(main);
 
-console.log(fs.existsSync, 'fs.existsSync')
+    if (Array.isArray(config.entry)) return config.entry.map(entry => main({...config, entry, name: entry}));
 
-let template = `
-var map=@@map
-function require (id){
-  var moduleFunc= map[id]
-  var exportModule={ exports: {} }
-  moduleFunc(exportModule)
-  return exportModule.exports
-}
-`
-// ismain是否为入口文件
-function main(pathtoModule, ismain = true) {
-  console.log('-------处理了哪些文件-------', pathtoModule)
-  //读取文件内容
-  // 获取给定路径(当前脚本文件的路径)的目录名称
-  const rootcatalog = path.dirname(pathtoModule)
+    if (typeof config.entry === 'object') return Object.entries(config.entry).map(([name, entry]) => main({...config, entry, name}));
 
-  //读取模块内容,并对里面的结果进行替换
-  const content = fs.readFileSync(pathtoModule, 'utf-8')
+    const defaultConfig = {
+        base: root,
+        name: 'index',
+        entry: 'index',
+        output: '[name].bundle.js',
+        public: (config.base || config.output) ? resolve(config.base || '', dirname(config.output || '')).replace(root, '') + '/' : '/'
+    };
+    const bundleConfig = Object.assign({}, defaultConfig, config);
 
-  //收集生成映射表文件的信息 :当前模块里面依赖了哪些模块 -- 所依赖模块的函数在哪
-  //在运行过程中静态分析模块中依赖了哪些内容
+    const modulePathIdMap = {};
+    const moduleList = [];
+    const moduleDepMapList = [];
+    const chunkModuleList = [];
+    const chunkModulePathIdMap = {};
 
-  const moduleMatch = /require\(['"](.+?)['"]\)/g
-  let match = null
-  while ((match = moduleMatch.exec(content))) {
-    const [, modulePath] = match
-    // 基于当前相对路径拼接出引用文件的绝对地址
-    const childpath = getfilePath(path.resolve(rootcatalog, modulePath))
-    console.log('相对路径', modulePath, '绝对路径', childpath)
+    deepTravel(resolve(root, bundleConfig.base, bundleConfig.entry), moduleList, moduleDepMapList, modulePathIdMap, chunkModuleList, chunkModulePathIdMap);
 
-    // 可能存在相同引用的情况   如果已经处理过则结束本次循环  不做处理
-    if (absoluteMapfs[childpath]) break
-    // 通过递归的方式处理子文件的引用内容
-    main(childpath, false)
-    const childModuleStr = absoluteMapfs[childpath]
-    requirePathMapChildfs[modulePath] = childModuleStr
-  }
-  console.log(requirePathMapChildfs)
+    chunkModuleList.forEach((chunk, id) => {
+        const dynamicTemplate = readFileSync(resolve(__dirname, 'chunk.boilerplate'), 'utf-8');
+        writeFileSync(
+            resolve(root, bundleConfig.base, `chunk_${id}.js`),
+            dynamicTemplate
+                .replace("/* dynamic-require-chunk-id */", `"chunk_${id}"`)
+                .replace("/* dynamic-require-chunk-code */", chunk),
+            "utf-8"
+        );
+    });
 
-  // 将文件内容拼接   并包裹在函数中返回
-  // const funcStr = ` function (require,module,exports){
-  //   ${content}
-  // }
-  //   `
-  const funcStr = content
-  absoluteMapfs[pathtoModule] = funcStr
+    writeFileSync(
+        resolve(root, bundleConfig.base, bundleConfig.output.replace('[name]', bundleConfig.name.replace(extname(bundleConfig.name), ''))),
+        readFileSync(resolve(__dirname, 'bundle.boilerplate'), 'utf-8')
+            .replace('/* runtime-config */', JSON.stringify(bundleConfig))
+            .replace('/* module-list-template */', moduleList.join(','))
+            .replace('/* module-dep-map-list-template */', moduleDepMapList.map(item => JSON.stringify(item)).join(',')),
+        'utf-8'
+    );
 
-  const tpl = template.replace('@@map', JSON.stringify(requirePathMapChildfs))
-  console.log(ismain, '------main---------')
-  if (!ismain) {
-    return tpl
-  }
-  return `${tpl}
-    (function(){
-    ${funcStr}
-    })()
-    `
+    watch(bundleConfig.base, {encoding: 'utf-8'}, eventType => eventType === "change" && main(bundleConfig));
 }
 
-module.exports = main
+function deepTravel(fullPath, moduleList, moduleDepMapList, modulePathIdMap, chunkModuleList, chunkModulePathIdMap, isChunk = false) {
+    const modulePathMatcher = /require(\.ensure)?\(["`'](.+?)["`']\)/g;
+    const moduleText = readFileSync(getFilePath(fullPath), 'utf-8');
+    const childModules = [];
+    const moduleDepMap = {};
+    let moduleContent = moduleText;
+    let match = null;
+    while ((match = modulePathMatcher.exec(moduleText)) !== null) {
+        const [, isDynamic, modulePath] = match;
+        const childModuleAbsolutePath = resolve(dirname(getFilePath(fullPath)), modulePath);
+        if ((isDynamic ? chunkModulePathIdMap : modulePathIdMap).hasOwnProperty(childModuleAbsolutePath)) {
+            moduleDepMap[modulePath] = isDynamic ? getChunkRuntimePath(chunkModulePathIdMap, childModuleAbsolutePath) : modulePathIdMap[childModuleAbsolutePath];
+            continue;
+        };
+        childModules.push(modulePath);
+        deepTravel(childModuleAbsolutePath, moduleList, moduleDepMapList, modulePathIdMap, chunkModuleList, chunkModulePathIdMap, !!isDynamic);
+        moduleDepMap[modulePath] = isDynamic ? getChunkRuntimePath(chunkModulePathIdMap, childModuleAbsolutePath) : modulePathIdMap[childModuleAbsolutePath];
+    }
+    const funcStr = `${funcWrapper[0]}\n${moduleContent}\n${funcWrapper[1]}`;
+    isChunk
+        ? cacheModule(chunkModuleList, chunkModulePathIdMap, funcStr, fullPath)
+        : cacheModule(moduleList, modulePathIdMap, funcStr, fullPath);
+    !isChunk && moduleDepMapList.push(moduleDepMap);
+}
+
+function cacheModule(list, map, listVal, mapKey) {
+    list.push(listVal);
+    map[mapKey] = list.length - 1;
+}
+
+function getChunkRuntimePath(chunkModulePathIdMap, chunkModuleAbsolutePath) {
+    return `chunk_${chunkModulePathIdMap[chunkModuleAbsolutePath]}`;
+}
+
+module.exports = main;

@@ -11,8 +11,7 @@
  * 1.进入文件夹   2. chmod +x 文件名 (给文件执行权限)    3. ./文件名 (执行文件)
  */
 
-const bundler = require('../script')
-
+const bundler = require('./bundle')
 const fs = require('fs')
 const path = require('path')
 // fs.readFileSync(文件路径,编码格式)
