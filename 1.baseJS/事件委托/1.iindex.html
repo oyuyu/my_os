@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="addBtn">添加</button>
+    <ul id="parent">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+
+
+    <div id="a" style="width: 100%; height: 300px;background-color: antiquewhite;">
+        a
+        <div id="b" style="width: 100%; height: 200px;background-color: burlywood;">
+            b
+            <div id="c" style="width: 100%; height: 100px;background-color: cornflowerblue;">
+                c
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            const oBtn = document.getElementById("addBtn")
+            const oUl = document.getElementById('parent')
+            oUl.addEventListener('click', (e) => {
+                console.log(e.target.innerText);
+
+            })
+
+            oUl.onmouseover = (e) => {
+                e.target.style.background = 'red'
+
+            }
+            oUl.onmouseout = (e) => {
+                e.target.style.background = ''
+            }
+
+
+            //新增节点 事件委托
+            oBtn.onclick = () => {
+                console.log(oUl.children);
+                const oLi = document.createElement('li')
+                oLi.innerText = oUl.children.length + 1
+                oUl.appendChild(oLi)
+
+            }
+
+
+            var a = document.getElementById('a')
+            var b = document.getElementById('b')
+            var c = document.getElementById('c')
+            //注册冒泡事件监听器
+            a.addEventListener('click', () => { console.log("冒泡a") })
+            b.addEventListener('click', () => { console.log('冒泡b') })
+            c.addEventListener('click', (e) => {
+                e.stopPropagation()
+                console.log("冒泡c")
+            })
+            a.addEventListener('click', () => { console.log("捕获a") }, true)
+            b.addEventListener('click', () => { console.log('捕获b') }, true)
+            c.addEventListener('click', () => { console.log("捕获c") }, true)
+
+
+            // 点击c  打印顺序    c-b-a
+            // 如果第三个参数设置为true  则 a-b-c
+
+        }
+    </script>
+
+
+
+</body>
+
+</html>
