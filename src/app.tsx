@@ -1,6 +1,5 @@
 import { history } from 'umi';
 import { createElement } from 'react';
-import ThemeProvider from '@components/ThemeProvider';
 // patchRoutes  修改路由
 // export const patchRoutes=({routes})=>{
 //     routes.unshift({
@@ -35,9 +34,9 @@ export const onRouteChange = ({ matchedRoutes }: any) => {
   }
 };
 
-export const rootContainer = (
-  lastRootContainer: any,
-  { routes, plugin, history }: any,
-) => {
-  return createElement(ThemeProvider, null, lastRootContainer);
-};
+// export const rootContainer = (
+//   lastRootContainer: any,
+//   { routes, plugin, history }: any,
+// ) => {
+//   return createElement(ThemeProvider, null, lastRootContainer);
+// };
