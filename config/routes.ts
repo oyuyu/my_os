@@ -1,22 +1,36 @@
+import { Component } from 'react';
+
 export default [
   {
     //是否严格模式   location与path是否完全匹配
-    exact: true,
-    path: '/login',
+    // exact: true,
+    path: '/user',
     title: '用户登录',
-    component: '@/pages/index',
+    routers: [
+      {
+        name: '用户登录',
+        path: '/user/login',
+        component: '@/pages/index',
+      },
+    ],
   },
   {
     path: '/',
     component: '@/layouts/index',
     // 路由的高阶组件封装    常用于路由级别的权限校验
-    wrappers: ['@/wrapper/auth'],
+    // wrappers: ['@/wrapper/auth'],
     routes: [
       {
         path: '/',
-        redirect: '/home', // 配置路由跳转
+        redirect: '/home',
       },
       {
+        path: '/home',
+        name: '首页',
+        Component: '@/pages/home/index',
+      },
+      {
+        name: '参数',
         path: '/params',
         component: '@/pages/routers/params',
       },
@@ -26,6 +40,7 @@ export default [
         routes: [
           {
             path: '/hooks/useRef',
+            name: 'useRef',
             title: 'useRef',
             component: '@/pages/index',
           },
