@@ -1,14 +1,14 @@
 import { defineConfig } from 'umi';
-import routes from './routes';
+import routes from './router';
 
 // 通过presets /plugins 配置插件
 const plugins = [];
 
 export default defineConfig({
   //布局
-  layout: {
-    name: '礼品卡',
-  },
+  // layout: {
+  //   name: '礼品卡',
+  // },
   // 生成asset-manifest.json
   manifest: {
     basePath: '/',

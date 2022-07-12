@@ -1,24 +1,53 @@
 /**
  * @页面基础布局
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ProLayout } from '@ant-design/pro-layout';
-import { Link } from 'umi';
+import { Link, useModel } from 'umi';
+import { settings as defaultSettings } from '../../config/defaultSettings';
 
-const BasicLayout: React.FC = ({ children }: any) => {
+const menuDataRender = (menuList: any) => {
+  return menuList.map((item: any) => {
+    const localItem = {
+      ...item,
+      children: item.children ? menuDataRender(item.children) : [],
+    };
+    return localItem;
+  });
+};
+
+const BasicLayout: React.FC = (props: any) => {
+  const { children, location = { pathname: '/' } } = props;
+
+  const { routes } = useModel('routes');
+
+  useEffect(() => {
+    // 获取动态菜单
+  }, []);
   return (
     <ProLayout
+      {...props}
+      {...defaultSettings}
+      routerData={routes}
+      // 自定义菜单项render方法
       menuItemRender={(menuItemProps, defaultDom) => {
-        console.log(menuItemProps.isUrl, menuItemProps.children);
-
+        console.log(menuItemProps, defaultDom, '--------');
         if (menuItemProps.isUrl || menuItemProps.children) {
           return defaultDom;
         }
         return <Link to={menuItemProps.path}>{menuItemProps.name}</Link>;
       }}
-      breadcrumbRender={(routers = []) => [...routers]}
+      // 自定义面包屑数据
+      // breadcrumbRender={(routers = []) => {
+      //   return [...routers];
+      // }}
+
+      // 自定义menudata
+      // menuDataRender={menuDataRender}
     >
       {children}
     </ProLayout>
   );
 };
+
+export default BasicLayout;

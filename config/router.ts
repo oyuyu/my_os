@@ -6,7 +6,7 @@ export default [
     // exact: true,
     path: '/user',
     title: '用户登录',
-    routers: [
+    routes: [
       {
         name: '用户登录',
         path: '/user/login',
@@ -16,7 +16,7 @@ export default [
   },
   {
     path: '/',
-    component: '@/layouts/index',
+    component: '@/layouts/BasicLayout',
     // 路由的高阶组件封装    常用于路由级别的权限校验
     // wrappers: ['@/wrapper/auth'],
     routes: [
