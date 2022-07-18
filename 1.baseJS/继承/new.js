@@ -57,7 +57,3 @@ function _new() {
 const p2 = _new(People)
 
 console.log(p2);
-
-
-
-

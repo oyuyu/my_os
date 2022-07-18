@@ -89,8 +89,7 @@ getname._apply(xiaoming, ['_apply'])
 getname._apply()
 
 /**                            
- * @bind
- * 使用场景
+ * @bind实现
  */
 Function.prototype._bind = function() {
     let [target = globalThis, args = []] = arguments

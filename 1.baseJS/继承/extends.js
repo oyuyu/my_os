@@ -14,12 +14,16 @@ function Parent() {
     }
 }
 
+// 作为构造函数存在
 function Child() { }
 
 // 更改子prototype也会将父的prototype改变
 // Child.prototype = Parent.prototype
 
-//直接将prototype覆盖,存在的问题: prototype上有个constructor属性  直接覆盖的话其constructor属性也被覆盖   因此需要重写constructor
+
+// ------让构造函数Child的prototype属性指向 要继承的那个构造函数  就可以继承到他的属性和方法=======
+// 直接将prototype覆盖,存在的问题: prototype上有个constructor属性  
+// 直接覆盖的话其constructor属性也被覆盖   因此需要重写constructor
 //让Child.prototype 使用Parent的prototype
 Child.prototype = new Parent()
 Child.prototype.constructor = Child
