@@ -1,6 +1,28 @@
 /**
+ * 常见场景
+ * 1.事件代理   2.缓存函数
+ */
+
+// 实现缓存函数   纯函数入参相同返回值相同 -- 如果入参相同则读取缓存中的返回值
+const cacheFn = (fn) => {
+  const cache = Object.create(null)
+  return (str) => {
+    const cacheData = cache[str]
+    if (!cacheData) {
+      cacheData = fn(str)
+      cache[str] = cacheData
+    }
+    return cacheData
+  }
+}
+
+
+
+
+/**
  * target 代理对象
  * handle 自定义操作方法的集合 本身是ES6设计的一个对象,用来定义代理对象的各种可代理操作
+ *
  */
 // let p=new Proxy(target,handler)
 
@@ -18,7 +40,6 @@ let p = new Proxy(obj, {
     // 判断代理对象是否拥有某个属性时触发
   },
 })
-
 
 /**
  * @proxy作用
