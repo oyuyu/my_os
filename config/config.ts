@@ -18,7 +18,7 @@ export default defineConfig({
   // react router的base  默认/
   base: '/',
   // 路由
-  routes: routes,
+  routes,
   // 开启快速刷新(热更新)
   fastRefresh: {},
   // F按需加载

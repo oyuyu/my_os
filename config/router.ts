@@ -35,6 +35,7 @@ export default [
         component: '@/pages/routers/params',
       },
       {
+        name: 'hooks',
         path: '/hooks',
         //子路由
         routes: [
@@ -42,7 +43,19 @@ export default [
             path: '/hooks/useRef',
             name: 'useRef',
             title: 'useRef',
-            component: '@/pages/index',
+            component: '@/pages/usehooks/useRef',
+          },
+        ],
+      },
+      {
+        name: '下载',
+        path: '/download',
+        //子路由
+        routes: [
+          {
+            path: '/download/a',
+            name: 'A标签下载',
+            component: '@/pages/download/aDownload',
           },
         ],
       },
