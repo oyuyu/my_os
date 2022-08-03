@@ -93,9 +93,9 @@ class Person {
 
 interface Ifn1Props {
   color: string;
-  readonly name: string; //只读属性
+  readonly name: string; //只读属性   使用const OR readonly要看它是作为变量使用还是属性使用
   age?: string; //可选属性
-  [props: string]: any;
+  [propName: string]: any; //其他属性绕过检查
 }
 
 //函数
@@ -109,3 +109,20 @@ const fn1: IFn = (x, y) => {
 const fn2 = (x: number, y: number): number => {
   return x + y;
 };
+
+// 可索引类型  定义索引签名类型 && 索引返回值类型
+interface StringArr {
+  [index: number]: string;
+}
+const stringArr: StringArr = ['你好', '加油'];
+
+interface ReadonlyIndex {
+  readonly [index: number]: string; //索引类型已读，防止给索引赋值
+}
+let readonlyIndex = ['心定'];
+// readonlyIndex[1]=99  不能赋值
+
+interface StringIndex {
+  [index: string]: number;
+}
+const strIndex: StringIndex = { age: 1 };
