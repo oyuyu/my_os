@@ -50,6 +50,11 @@ enum Enum {
   DOWN = 9, //9
   RIGHT, //10
 }
+declare enum Enum0 {
+  A = 1,
+  B,
+  C = 2,
+}
 
 enum Enum1 {
   RED, //0
