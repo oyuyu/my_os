@@ -16,7 +16,7 @@ interface Interface3 {
  * 把多种类型叠加到一起  需同时具备所有的对象成员
  */
 type Intersection1 = Type1 & Type2 & Type3;
-const xiaoming: Intersection1 = { name: '小明', age: 19, sex: '男' };
+const inter1: Intersection1 = { name: '小明', age: 19, sex: '男' };
 
 function intersectionfn<T, U>(x: T, y: U): T & U {
   return { ...x, ...y };
@@ -37,6 +37,14 @@ const union2: Union1 = { name: '', age: 16 };
 
 type IUnion1 = Interface1 | Interface2 | Interface3;
 const union3: IUnion1 = { name: '', age: 16 };
+/**
+ * @必选属性 Required
+ */
+interface Par1 {
+  name?: string;
+  age?: number;
+}
+const req1: Required<Par1> = { name: '', age: 19 };
 
 /**
  * @可选属性 Partial
@@ -46,12 +54,44 @@ let p: Partial<Union1> = {};
 p = { name: '' };
 
 /**
+ * @类型映射 Record<K,T>  K为属性  T为K的类型
+ */
+type K1 = 'red' | 'blue';
+let colors: Record<K1, number> = { blue: 1, red: 2 };
+let enum2: Record<number, string> = { 1: '开始', 2: '结束' };
+
+type Name = '小红' | '小I';
+type People3 = { name: string; age: number };
+let students: Record<Name, People3> = {
+  小红: { name: 'xiao', age: 19 },
+  小I: { name: 'xiao', age: 19 },
+};
+
+/**
  * @排除属性 Exclude
  * 只能从联合类型中排除
  */
 
-type U1 = { add: string };
-let e1: Exclude<IUnion1, U1> = { age: 16 };
+type T1 = { name: string } | { age: string };
+type U1 = { age: string };
+
+let e1: Exclude<T1, U1> = { name: '' };
+
+/**
+ * @取并集 Extract
+ */
+
+let e2: Extract<T1, U1> = { age: '' };
+/**
+ * @剔除属性 Omit
+ */
+type P1 = { name: string; age: number; sex: string };
+let o1: Omit<P1, 'name' | 'age'> = { sex: '' };
+
+/**
+ * @从类型中挑选属性 Pick  挑选出来的属性 继承之前的可选/只读/类型 等属性
+ */
+let p1: Pick<P1, 'name' | 'age'> = { name: '', age: 16 }; //name age 是必选属性
 
 /**
  * &类型断言 is
@@ -72,6 +112,36 @@ const unionfn = (x: IUnion1): IUnion1 => {
 const unionfn1 = <T extends IUnion1>(x: T): T => {
   return x;
 };
+/**
+ * @类型守卫  运行时进行检查,确保在指定范围之内
+ * in
+ * typeof
+ * instanceof
+ */
+
+const fn6 = <T>(x: T): T => {
+  if ('name' in x) {
+    return { ...x, name: '你好' };
+  }
+  return x;
+};
+const fn6res = fn6({ name: 'xx', age: 10 });
+console.log(fn6res);
+
+function isTypeof(val: string | number) {
+  if (typeof val === 'number') return 'number';
+  if (typeof val === 'string') return 'string';
+  return '啥也不是';
+}
+
+function creatDate(date: Date | string) {
+  console.log(date);
+  if (date instanceof Date) {
+    date.getDate();
+  } else {
+    return new Date(date);
+  }
+}
 
 /**
  * @索引类型
@@ -110,3 +180,15 @@ type PartialP<T> = {
 let p2: Partial<Interface1> = {};
 p2 = { name: '' };
 p2.name = '';
+
+/**
+ * @返回值类型 ReturnType
+ */
+
+type Fn8 = (x: string, y: number) => number;
+let returnT1: ReturnType<Fn8> = 9;
+/**
+ * @入参类型组成的元组类型 Parameters
+ */
+
+let paramT1: Parameters<Fn8> = ['fist', 2]; //[string,number]

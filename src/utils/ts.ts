@@ -5,7 +5,23 @@
  *
  */
 
-import ContextTreeNode from 'rc-tree/lib/TreeNode';
+/**
+ * @非空断言 ! undefined/null
+ * 仅适用于判断对象属性
+ */
+let notNull = (obj: { name?: string }) => {
+  obj!.name = '我的名字';
+  return obj;
+};
+let res = notNull({});
+
+let user: string | null | undefined;
+console.log(user!.toUpperCase()); // 编译报错
+
+let notNull1: number;
+let notNull2!: number;
+// console.log(notNull1);    //err 变量在使用前必须被赋值为number类型
+console.log(notNull2);
 
 /**
  * @基础类型
@@ -154,6 +170,12 @@ class Person {
 
 /**
  * @接口 对值结构进行类型检查
+ * @与类型别名type的区别
+ * type是对值具有的结构类型检查  接口为类型名/代码/第三方代码定义数据模型
+ * type可以作用于原始类型/联合类型/元组以及任何需要手写的类型  interface不能
+ * 起别名不会新建一个类型.而是创建一个新名字来引用那个类型
+ * interface能合并声明  type不可以
+ * interface用 extends实现扩展   type用&实现扩展
  */
 
 interface Ifn1Props {
@@ -166,6 +188,10 @@ interface Ifn1Props {
 interface Age {
   age: number;
 }
+interface Age {
+  age2: number;
+}
+// Age类型的变量 要同时具备 age age2 两个属性(interface会进行属性合并)
 interface Address {
   address: string;
 }
@@ -177,8 +203,8 @@ interface People2 extends Age, Address {
   name: string;
 }
 
-const xiaohong: People = { name: 'xiaohong', age: 19 };
-const xiaoming: People2 = { name: 'xiaohong', age: 19, address: '' };
+const xiaohong: People = { name: 'xiaohong', age: 19, age2: 99 };
+const xiaoming: People2 = { name: 'xiaohong', age: 19, age2: 99, address: '' };
 let xiaoli = <People2>{};
 xiaoli.name = '小李';
 
