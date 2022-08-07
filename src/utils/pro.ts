@@ -12,6 +12,13 @@ interface Interface3 {
   sex: string;
 }
 /**
+ * @类型断言 <>  / as
+ */
+
+(<string>'你好啊').length;
+('str' as string).length;
+
+/**
  * @交叉类型 &
  * 把多种类型叠加到一起  需同时具备所有的对象成员
  */
@@ -92,6 +99,16 @@ let o1: Omit<P1, 'name' | 'age'> = { sex: '' };
  * @从类型中挑选属性 Pick  挑选出来的属性 继承之前的可选/只读/类型 等属性
  */
 let p1: Pick<P1, 'name' | 'age'> = { name: '', age: 16 }; //name age 是必选属性
+
+/**
+ * @提取属性 Extract
+ * 取交集 中的一个或多个
+ */
+const extract1: Extract<
+  Union1,
+  { name: string } | { id: number } | { age: number }
+> = { name: '' };
+const extract2: Extract<'a' | 'b' | 'c' | 'd', 'c' | 'd'> = 'd' || 'c';
 
 /**
  * &类型断言 is

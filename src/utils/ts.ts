@@ -41,14 +41,21 @@ type WithNUll<T> =
   | void
   | undefined
   | null
-  | never;
+  | never
+  | symbol;
 
 interface IProps {
   onClick: () => void;
 }
+
 const errorfn = (errMsg: string): never => {
   throw new Error(errMsg);
 };
+
+let sym = Symbol();
+const obj = { [sym]: 'value' };
+console.log(obj[sym]); //value
+
 let str1: string = '你好';
 let any1: any = 'enen';
 const unknown: unknown = str1;
@@ -202,9 +209,7 @@ interface People2 extends Age, Address {
   //多个接口的合成接口
   name: string;
 }
-
 const xiaohong: People = { name: 'xiaohong', age: 19, age2: 99 };
-const xiaoming: People2 = { name: 'xiaohong', age: 19, age2: 99, address: '' };
 let xiaoli = <People2>{};
 xiaoli.name = '小李';
 
