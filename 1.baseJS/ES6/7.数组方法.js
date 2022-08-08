@@ -1,3 +1,19 @@
+/* * @Author: whr
+ * @Date: 2022-08-08 10:48:10
+ * @Last Modified by:   whr
+ * @Desc: 判断数组   数组去重  */
+
+/**
+ * @判断是否为数组
+ */
+let res
+
+res = Array.isArray([])
+res = [(1, 2)] instanceof Array
+res = [].__proto__.construcor === Array
+res = [].construcor === Array
+res = Object.prototype.toString.call([]) //[object Array]
+
 /**
  * @数组去重
  */

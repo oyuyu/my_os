@@ -124,7 +124,7 @@ Parent2.prototype.getname = function () {
 function Child2() {
     Parent2.call(this, ...arguments)
 }
-Child2.prototype = Object.create(Parent.prototype)   //变动点
+Child2.prototype = Object.create(Parent.prototype)   //变动点  object.create()创建一个新对象 使用现有对象作为新建对象的原型   Parent.prototype作为Child2.prototype的原型
 Child2.prototype.constructor = Child2
 
 

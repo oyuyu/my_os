@@ -3,12 +3,12 @@ class Lazy {
   //写成私有属性的形式 防止在外部被篡改
   //static #intance = null
   static intance = null
-  // 定义实例化单例的方法
+  // 定义实例化单例的方法   如果实例存在则直接返回 如果实例不存在则新建一个
   static getInstance() {
-    if (!Lazy.instance) {
-      Lazy.instance = new Lazy('lazy')
+    if (!this.instance) {
+      this.instance = new Lazy('lazy')
     }
-    return Lazy.instance
+    return this.instance
   }
 
   constructor(name) {

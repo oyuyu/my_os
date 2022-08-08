@@ -17,12 +17,10 @@ const cacheFn = (fn) => {
 }
 
 
-
-
 /**
  * target 代理对象
  * handle 自定义操作方法的集合 本身是ES6设计的一个对象,用来定义代理对象的各种可代理操作
- *
+ * proxy对象包装另一个对象.并拦截读写/其他操作  自行去处理.或者透明的允许该对象处理他们
  */
 // let p=new Proxy(target,handler)
 
