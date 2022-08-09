@@ -1,101 +1,121 @@
 /* * @Author: whr
  * @Date: 2022-08-08 10:48:10
  * @Last Modified by:   whr
- * @Desc: 判断数组   数组去重  */
+ * @Desc: 判断数组   数组去重   数组方法 */
 
 /**
  * @判断是否为数组
  */
-let res
+let res;
 
-res = Array.isArray([])
-res = [(1, 2)] instanceof Array
-res = [].__proto__.construcor === Array
-res = [].construcor === Array
-res = Object.prototype.toString.call([]) //[object Array]
+res = Array.isArray([]);
+res = [(1, 2)] instanceof Array;
+res = [].__proto__.construcor === Array;
+res = [].construcor === Array;
+res = Object.prototype.toString.call([]); //[object Array]
 
 /**
  * @数组去重
  */
-const notunionArr = [1, 1, 2, 3, 2, 3, { a: 1, b: 2 }, { a: 1, b: 2 }]
+const notunionArr = [1, 1, 2, 3, 2, 3, { a: 1, b: 2 }, { a: 1, b: 2 }];
 // 双重循环  时间复杂度O(n^2)
 // 引用类型无法去重
 function uniArr1(arr) {
   //首先判断类型
   if (!Array.isArray(arr)) {
-    return arr
+    return arr;
   }
-  let resArr = [arr[0]]
+  let resArr = [arr[0]];
   for (let i of arr) {
-    let isunion = true
+    let isunion = true;
     for (const j of resArr) {
       if (i === j) {
-        isunion = false
-        break
+        isunion = false;
+        break;
       }
     }
-    isunion && resArr.push(i)
+    isunion && resArr.push(i);
   }
-  return resArr
+  return resArr;
 }
-console.log(uniArr1(notunionArr))
+console.log(uniArr1(notunionArr));
 
 //indexof 引用类型无法去重 时间复杂度O(n^2)
 function uniArr2(arr) {
-  if (!Array.isArray(arr)) return arr
-  let res = []
+  if (!Array.isArray(arr)) return arr;
+  let res = [];
   for (const i of arr) {
-    res.indexOf(i) < 0 && res.push(i)
+    res.indexOf(i) < 0 && res.push(i);
   }
-  return res
+  return res;
 }
-console.log(uniArr2(notunionArr))
+console.log(uniArr2(notunionArr));
 
 //判断元素第一次出现的位置 时间复杂度O(n^2)
 
 function uniArr3(arr) {
-  if (!Array.isArray(arr)) return arr
-  return arr.filter((item, index) => arr.indexOf(item) === index)
+  if (!Array.isArray(arr)) return arr;
+  return arr.filter((item, index) => arr.indexOf(item) === index);
 }
-console.log(uniArr3(notunionArr))
+console.log(uniArr3(notunionArr));
 
 //相邻元素去重
 function uniArr4(arr) {
-  if (!Array.isArray(arr)) return arr
-  arr = arr.sort()
-  let res = []
+  if (!Array.isArray(arr)) return arr;
+  arr = arr.sort();
+  let res = [];
   for (let i = 0; i < arr.length; i++) {
-    arr[i] !== arr[i - 1] && res.push(arr[i])
+    arr[i] !== arr[i - 1] && res.push(arr[i]);
   }
-  return res
+  return res;
 }
-console.log(uniArr4(notunionArr))
+console.log(uniArr4(notunionArr));
 
 // set解构赋值
 function uniArr5(arr) {
-  if (!Array.isArray(arr)) return arr
-  return [...new Set(arr)]
+  if (!Array.isArray(arr)) return arr;
+  return [...new Set(arr)];
 }
-console.log(uniArr5(notunionArr))
+console.log(uniArr5(notunionArr));
 
 // arrfrom && set
 function uniArr6(arr) {
-  if (!Array.isArray(arr)) return arr
-  return Array.from(new Set(arr))
+  if (!Array.isArray(arr)) return arr;
+  return Array.from(new Set(arr));
 }
-console.log(uniArr6(notunionArr))
+console.log(uniArr6(notunionArr));
 
 // 利用对象属性去重  只有这个可以对引用类型进行去重
 function uniArr7(arr) {
-  if (!Array.isArray(arr)) return arr
-  let res = []
-  let obj = {}
+  if (!Array.isArray(arr)) return arr;
+  let res = [];
+  let obj = {};
   for (const i of arr) {
     if (!obj[i]) {
-      res.push(i)
-      obj[i] = 1
+      res.push(i);
+      obj[i] = 1;
     }
   }
-  return res
+  return res;
 }
-console.log(uniArr7(notunionArr))
+console.log(uniArr7(notunionArr));
+
+/**
+ * @数组方法
+ */
+
+// 伪数组转数组
+let obj = {
+  0: 88,
+  1: 66,
+  2: 33,
+  3: 11,
+  length: 4,
+};
+let arr1 = Array.from(obj); // [88,66,33,11]
+console.log(arr1);
+const initArr = [1, 2, 3, 4];
+
+//指定位置开始复制成员   复制到其他位置
+const arr2 = initArr.copyWithin(1, 2, 3);
+console.log(arr2, initArr);
