@@ -20,14 +20,14 @@ export default [
     // 路由的高阶组件封装    常用于路由级别的权限校验
     // wrappers: ['@/wrapper/auth'],
     routes: [
+      // {
+      //   path: '/',
+      //   redirect: '/home',
+      // },
       {
-        path: '/',
-        redirect: '/home',
-      },
-      {
-        path: '/home',
         name: '首页',
-        Component: '@/pages/home/index',
+        path: '/home',
+        component: '@/pages/home/home',
       },
       {
         name: '参数',

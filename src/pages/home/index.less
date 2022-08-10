@@ -1,0 +1,138 @@
+.origin {
+  width: 200px;
+  margin-bottom: 6px;
+}
+
+.noscale {
+  border-bottom: 1px solid red;
+}
+
+.scalehalf {
+  border-bottom: 1px solid red;
+  transform: scale(1, 0.5);
+}
+
+// 效果是虚的
+.scalehalf2 {
+  height: 1px;
+  background-color: blue;
+  transform: scaleY(0.5);
+}
+
+// 效果是虚的
+.scalehalf3 {
+  height: 1px;
+  background: linear-gradient(0deg, #fff, blue); //渐变角度 从下到上
+}
+
+//在Chrome和Firefox都非常完美  Safari不支持小于1px的boxshadow
+.scalehalf4 {
+  height: 1px;
+  box-shadow: 0 0.5px 0 red; //垂直方向偏移0.5px
+}
+
+.topDiv {
+  width: 200px;
+  border: 1px solid chartreuse;
+  overflow: auto;
+}
+
+.floatLeft {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  float: left;
+}
+
+.text {
+  border: 1px solid saddlebrown;
+}
+
+.bfc1 {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  margin-bottom: 10px;
+}
+
+.bfc2 {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+//
+.display1 {
+  background-color: aqua;
+  height: 100px;
+  width: 100px;
+  float: left;
+}
+
+.display2 {
+  background-color: bisque;
+  height: 100px;
+  width: 100%;
+}
+
+.display3 {
+  background-color: aqua;
+  height: 100px;
+  width: 100px;
+  float: left;
+}
+
+.display4 {
+  background-color: bisque;
+  height: 100px;
+  width: calc(100vm-100px);
+}
+
+.father1 {
+  display: flex;
+}
+
+.display5 {
+  background-color: aqua;
+  height: 100px;
+  width: 100px;
+}
+
+.display6 {
+  background-color: bisque;
+  height: 100px;
+  flex: 1;
+}
+
+.father2 {
+  float: left;
+  width: 100%;
+
+  .left2 {
+    background-color: aqua;
+    height: 100px;
+    width: 100px;
+    float: left;
+  }
+
+  .right2 {
+    background-color: bisque;
+    height: 100px;
+  }
+}
+
+.father3 {
+  .left3 {
+    background-color: aqua;
+    height: 100px;
+    width: 100px;
+    float: left;
+  }
+
+  .right2 {
+    background-color: bisque;
+    height: 100px;
+  }
+}
