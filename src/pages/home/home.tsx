@@ -36,10 +36,21 @@ export default (props: any) => {
         <div className={styles.left2}>左</div>
         <div className={styles.right2}>右边</div>
       </div>
+      <br />
       <div className={styles.father3}>
-        <div className={styles.left3}>左</div>
-        <div className={styles.right3}>右边</div>
-        <div className={styles.center3}>中间</div>
+        <div className={styles.left3}>左1</div>
+        <div className={styles.right3}>右1</div>
+        <div className={styles.center3}>中间1</div>
+      </div>
+      <div className={styles.father4}>
+        <div className={styles.left3}>左2</div>
+        <div className={styles.right3}>右2</div>
+        <div className={styles.center3}>中间2</div>
+      </div>
+      <div className={styles.father5}>
+        <div className={styles.left3}>左3</div>
+        <div className={styles.center3}>中间3</div>
+        <div className={styles.right3}>右3</div>
       </div>
     </div>
   );

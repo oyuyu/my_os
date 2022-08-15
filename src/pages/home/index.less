@@ -124,15 +124,78 @@
 }
 
 .father3 {
-  .left3 {
+  border: 1px solid red;
+  clear: both;
+
+  .left3,
+  .right3 {
+    position: absolute;
     background-color: aqua;
     height: 100px;
     width: 100px;
+  }
+
+  .center3 {
+    margin: 0 100px;
+    height: 100px;
+    background-color: red;
+  }
+
+  .left3 {
+    left: 0;
+  }
+
+  .right3 {
+    right: 0;
+  }
+}
+
+.father3 ::after {
+  content: '';
+  display: block;
+  height: 100px;
+}
+
+.father4 {
+  border: 1px solid yellow;
+  clear: both;
+
+  .left3,
+  .right3 {
+    background-color: red;
+    height: 100px;
+    width: 100px;
+  }
+
+  .left3 {
     float: left;
   }
 
-  .right2 {
-    background-color: bisque;
+  .right3 {
+    float: right;
+  }
+
+  .center3 {
+    margin: 0 100px;
     height: 100px;
+    background-color: bisque;
+  }
+}
+
+.father5 {
+  border: 1px solid yellow;
+  display: flex;
+
+  .center3 {
+    flex: 1;
+    height: 100px;
+    background-color: bisque;
+  }
+
+  .left3,
+  .right3 {
+    background-color: red;
+    height: 100px;
+    width: 100px;
   }
 }
