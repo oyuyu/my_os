@@ -51,9 +51,7 @@ function buyPromise(name) {
             } else {
                 resolve(content)
             }
-
         })
-
     })
 }
 
