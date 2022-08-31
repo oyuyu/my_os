@@ -76,7 +76,6 @@ let students: Record<Name, People3> = {
 
 /**
  * @排除属性 Exclude
- * 只能从联合类型中排除
  */
 
 type T1 = { name: string } | { age: string };
