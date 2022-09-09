@@ -3,7 +3,7 @@ const p2 = new Promise((resolve) => {
   setTimeout(() => resolve(2), 1000)
 })
 const p3 = new Promise((resolve) => {
-  setTimeout(() => resolve(3), 3000)
+  setTimeout(() => resolve(3), 500)
 })
 
 const p4 = Promise.reject('err4')
@@ -19,20 +19,28 @@ const p5 = Promise.reject('err5')
 Promise._all = (promises) => {
   return new Promise((resolve, reject) => {
     let res = []
-    promises.forEach((p) => {
-      p.then((_res) => {
-        res.push(_res)
-        if (res.length === promises.length) {
-          resolve(res)
-        }
-      }).catch(reject)
+    let count = 0
+    promises.forEach((p, i) => {
+      Promise.resolve(p)
+        .then((_res) => {
+          res[i] = _res
+          count++
+          if (promises.length === count) {
+            resolve(res)
+          }
+        })
+        .catch(reject)
     })
   })
 }
 
-Promise._all([p1, p2, p3]).then((res) => {
-  console.log(res)
-})
+// Promise._all([p1, p2, p3, p4])
+//   .then((res) => {
+//     console.log(res)
+//   })
+//   .catch((err) => {
+//     console.log(err)
+//   })
 
 /**
  * Promise.allSettled([])
@@ -40,11 +48,51 @@ Promise._all([p1, p2, p3]).then((res) => {
  */
 
 /**
- * Promise.any([])
- * 任意Promise对象成功  返回promise成功回调的返回值
+ * Promise.any([])   草案阶段
+ * 任意Promise对象成功  返回promise成功回调的返回值  全部失败才返回失败的回调
  */
+
+Promise._any = (promises) => {
+  return new Promise((resolve, reject) => {
+    let errs = []
+    let count = 0
+    promises.forEach((p, i) => {
+      Promise.resolve(p)
+        .then(resolve)
+        .catch((err) => {
+          errs[i] = err
+          count++
+          if (promises.length === count) reject(errs)
+        })
+    })
+  })
+}
+
+// Promise.any([p4, p5])
+//   .then((res) => {
+//     console.log(res)
+//   })
+//   .catch((err) => {
+//     console.log(err)
+//   })
 
 /**
  * Promise.race([])
  * 任意Promise状态敲定(成功/拒绝)
  */
+
+Promise._race = (promises) => {
+  return new Promise((resolve, rejecct) => {
+    promises.forEach((p) => {
+      Promise.resolve(p).then(resolve).catch(rejecct)
+    })
+  })
+}
+
+Promise._race([p3, p4])
+  .then((res) => {
+    console.log(res)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
