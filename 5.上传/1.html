@@ -1,0 +1,22 @@
+<!-- 原始文件上传 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原始文件上传</title>
+</head>
+
+<body>
+    <!-- 利用iframe实现局部刷新  使form表单的跳转行为在iframe内完成 -->
+    <iframe id="tempIframe" name="tempIframe" src="" style="display: none;"></iframe>
+    <form method="post" action="http://localhost:5500" enctype="multipart/form-data">
+        选择文件:<input type="file" name='file1' multiple />
+        <!-- 必须设置name属性 否则无法发送 -->
+        <button type="submit">上传</button>
+    </form>
+</body>
+
+</html>
