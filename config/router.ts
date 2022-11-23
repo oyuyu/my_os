@@ -25,9 +25,13 @@ export default [
       //   redirect: '/home',
       // },
       {
-        name: '首页',
+        path: '/',
+        redirect: '/home',
+      },
+      {
         path: '/home',
-        component: '@/pages/home/home',
+        name: '首页',
+        Component: '@/pages/home/index',
       },
       {
         name: '参数',
