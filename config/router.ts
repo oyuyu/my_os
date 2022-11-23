@@ -48,6 +48,19 @@ export default [
         ],
       },
       {
+        name: 'comps',
+        path: '/comps',
+        //子路由
+        routes: [
+          {
+            path: '/comps/renderProps',
+            name: 'render props',
+            title: 'render props',
+            component: '@/pages/comps/renderProps',
+          },
+        ],
+      },
+      {
         name: '下载',
         path: '/download',
         //子路由
