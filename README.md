@@ -41,6 +41,35 @@
 |                    |                           |
 |                    |                           |
 
+
+
+### commitizen
+作用:  
+commitizen是一个基于模板驱动的约束规范工具    约束提交commit规范
+使用:  
+使用commitizen的git cz命令可代替原生的git commit命令
+配置:  
+全局部署
+npm i -g commitizen cz-conventional-changelog
+不同系统中创建.czrc文件，加入以下内容。
+Windows系统：在C:/Users/$USER目录中创建.czrc文件
+MacOS系统：在~目录中创建.czrc文件
+
+局部部署
+npm i -D commitizen cz-conventional-changelog
+在package.json中指定scripts与config。
+
+{
+	"script": {
+		"commit": "git-cz"
+	},
+	"config": {
+		"commitizen": {
+			"path": "node_modules/cz-conventional-changelog"
+		}
+	}
+}
+
 ## 文档
 
 https://nodejs.org/zh-cn/download/releases/ node 与 npm 对应版本

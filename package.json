@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "从零到一前端工程化",
   "main": "src/index.js",
-  "type": "module",
   "engines": {
     "node": ">=13.2.0",
     "npm": ">=6.31.1"
@@ -12,7 +11,13 @@
     "start:node": "node --es-module-specifier-resolution=node src/index.js ",
     "start:babel-node": "babel-node src/index.js",
     "start": "nodemon -x babel-node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "commit": "git add .&& git-cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
   },
   "babel": {
     "presets": [
@@ -49,6 +54,9 @@
     "@babel/preset-env": "^7.20.2",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
+    "commitizen": "^4.2.5",
+    "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^7.0.0",
     "eslint": "^8.28.0",
     "eslint-plugin-react": "^7.31.11",
     "nodemon": "^2.0.20",
